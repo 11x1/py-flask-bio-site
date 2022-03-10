@@ -1,5 +1,4 @@
 from flask import Flask, url_for, redirect, session, render_template, request
-import mysql.connector
 
 from sql_helpers import login_and_return_db
 
@@ -79,10 +78,102 @@ def userlist_page():
 
 @app.route('/users/<string:username>.<int:userid>')
 def profile(username, userid):
+    # If we aren't logged in, return to login page
     if not 'username' in session: return redirect('login')
+    # Connect to database
+    db = login_and_return_db()
+    cursor = db.cursor()
+    cursor.execute('use webdev')
 
-    return render_template('profile.html', username=session['username'], uid=session['uid'], profile_username=username, profile_userid=userid)
+    # check if userid exists
+    cursor.execute(f'select username from users where userid = "{userid}"')
+    try:
+        real_username = cursor.fetchone()[0]
+    except:
+        return redirect('../profile_not_found')
+    
+    # Redirect if uid doesnt match username
+    if real_username != username: return redirect(f'../users/{real_username}.{userid}')
 
+    # variables if user is the owner of the profile
+    is_owner = None
+    url = None
+
+    # Handle if user is owner of the profile
+    if session['username'] == username: 
+        is_owner = True
+        # Edit profile href value
+        url = f'users/{username}.{userid}/edit'
+    
+    # Get description and profile picture url from database
+    cursor.execute(f'select description from users where username = "{username}"')
+    profile_description = cursor.fetchone()[0]
+    cursor.execute(f'select profile_picture from users where username="{username}"')
+    profile_picture_url = cursor.fetchone()[0]
+
+    # Render profile template with our variables
+    #
+    # username -> use to show who we are logged in as
+    # uid      -> use to show our current user uid
+    # 
+    # profile_username    -> user profile name we are looking at
+    # profile_userid      -> user profile uid we are looking at
+    # profile_description -> user profile desc. we are looking at
+    # profile_picture_url -> user profile pfp url we are looking at
+    # 
+    # is_owner -> True if we are looking at our profile
+    # url      -> href of 'edit profile' element
+    return render_template('profile.html', username=session['username'], uid=session['uid'], profile_username=username, profile_userid=userid, profile_description=profile_description, profile_picture_url=profile_picture_url, is_owner=is_owner, url=url)
+
+
+@app.route('/profile_not_found')
+def profilenofound_page():
+    if not 'username' in session: return redirect('login')
+    return render_template('profilenotfound.html')
+
+
+@app.route('/users/<string:username>.<int:userid>/edit', methods=['POST', 'GET'])
+def edit_profile(username, userid):
+    if not 'username' in session: return redirect('login')
+    # if we arent logged in as the user we are looking at, return to user profile page
+    if not session['username'] == username: return redirect(f'../users/{username}.{userid}')
+    error = None
+
+    # db stuff
+    db = login_and_return_db()
+    cursor = db.cursor()
+    cursor.execute(f'use webdev')
+
+    # variables for template rendering
+    cursor.execute(f'select description from users where username="{username}"')
+    description = cursor.fetchone()[0]
+    cursor.execute(f'select profile_picture from users where username="{username}"')
+    profile_picture_url = cursor.fetchone()[0]
+
+    if request.method == 'POST':
+        # get form values
+        new_pfp_url = request.form['profile_picture_url']
+        new_desc = request.form['description']
+        if len(new_desc) > 100: error = 'Description too long (>100 chars)'
+        else:
+            if new_pfp_url != profile_picture_url:
+                cursor.execute(f"UPDATE users SET profile_picture = '{new_pfp_url}' WHERE username = '{username}'")
+            if new_desc != description:
+                cursor.execute(f"UPDATE users SET description = '{new_desc}' WHERE username = '{username}'")
+            db.commit()
+            return redirect(f'/users/{username}.{userid}')
+
+    # Render profileedit template with our variables
+    #
+    # username -> use to show who we are logged in as
+    # uid      -> use to show our current user uid
+    # 
+    # profile_username    -> user profile name we are looking at
+    # profile_userid      -> user profile uid we are looking at
+    # profile_description -> user profile desc. we are looking at
+    # profile_picture_url -> user profile pfp url we are looking at
+    # error               -> feedback to user (description too long)
+    return render_template('profileedit.html', username=session['username'], uid=session['uid'], profile_username=username, profile_userid=userid, description=description, profile_picture_url=profile_picture_url, error=error)
 
 
 @app.route('/logout')
