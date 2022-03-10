@@ -1,0 +1,61 @@
+body {
+    background-color: #1f1f1f;
+}
+
+.signin-window {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    background-color: #323232;
+    text-align: center;
+    height: auto;
+    width: 300px;
+    border-radius: 10px;
+}
+
+.input-fields {
+    display: grid;
+    position: relative;
+    padding: 10px;
+}
+
+.input-fields input {
+    position: relative;
+    margin: 2px;
+    padding: 6px;
+    color: #95a5d5;
+    background-color: #1f1f1f;
+    border-color: #95a5d5;
+    border-radius: 10px;
+}
+
+.signin-buttons {
+    position: relative;
+    display: grid;
+    text-align: center;
+}
+
+.btn-signin {
+    position: relative;
+    width: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    background-color: #66749b;
+    border: #b4c7ff solid;
+}
+
+.btn-register {
+    margin-top: 7px;
+    color: #66749b;
+    text-decoration: none;
+    font-weight: 400;
+    font-family: "Yu Gothic UI Semibold";
+}
+
+.btn-register:hover {
+    cursor: pointer;
+}
