@@ -122,7 +122,7 @@ def profile(username, userid):
     if session['username'] == username: 
         is_owner = True
         # Edit profile href value
-        url = f'users/{username}.{userid}'
+    url = f'users/{session["username"]}.{session["uid"]}'
     
     # Get description and profile picture url from database
     cursor.execute(f'select description from users where username = "{username}"')
@@ -210,6 +210,7 @@ def edit_profile(username, userid):
 def logout():
    # remove the username from the session if it is there
    session.pop('username', None)
+   session.pop('uid', None)
    return redirect('/')
 
 
