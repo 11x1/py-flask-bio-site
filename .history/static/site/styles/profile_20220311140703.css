@@ -1,0 +1,8 @@
+.header { 
+    margin-top: -10px;
+    background-color: red; 
+}
+
+.header img {
+    max-width: 10px;
+}

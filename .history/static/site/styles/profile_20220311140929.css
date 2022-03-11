@@ -1,0 +1,17 @@
+.header { 
+    position: fixed;
+    margin: -10px;
+    height: 70px;
+    width: 100%;
+    background-color: red; 
+}
+
+.header img {
+    padding: 5px;
+    max-width: 60px;
+}
+
+.header a {
+    position: relative;
+
+}

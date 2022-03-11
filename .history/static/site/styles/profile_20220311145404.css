@@ -1,0 +1,108 @@
+.header { 
+    position: fixed;
+    margin: -9px;
+    height: 70px;
+    width: 100%;
+    background-color: #383838; 
+}
+
+.header img {
+    padding: 5px;
+    max-width: 60px;
+}
+
+.header-info-text {
+    position: fixed;
+    top: 25px;
+
+    color: #8080eb;
+    font-weight: 600;
+    font-size: 18px;
+    font-family: "Helvetica Neue",Helvetica,A;
+}
+
+.header-profile-btn {
+    position: fixed;
+    right: 10px;
+    top: 20px;
+    border: 6px solid #ababeb;
+    background-color: #ababeb;
+    border-radius: 6px;
+
+    color: #454546;
+    font-family: "Helvetica Neue",Helvetica,A;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.header-logout-btn {
+    position: fixed;
+    right: 85px;
+    top: 20px;
+    border: 6px solid #454546;
+    background-color: #454546;
+    border-radius: 6px;
+
+    color: #7a7acc;
+    font-family: "Helvetica Neue",Helvetica,A;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.main-profile {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+}
+
+.profile-card {
+    background-color: #313131;
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 #66749b;
+    width: 420px;
+    min-height: 80px;
+}
+
+.profile-picture img {
+    position: relative;
+    float: left;
+    max-width: 50px;
+    max-height: 50px;
+    width: 50px;
+    margin: 8px;
+    display: block;
+
+    border-radius: 10px;
+    border: 3px solid #8080eb;
+}
+
+.profile-card div.profile-name {
+    color: #8080eb;
+    font-family: "Helvetica Neue",Helvetica,A;
+    font-weight: 700;
+    font-size: 20px;
+    padding-top: 5px;
+}
+
+.profile-card div.profile-userid {
+    color: #8080eb;
+    font-family: "Helvetica Neue",Helvetica,A;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.profile-card div.profile-description {
+    color: #8080eb;
+    font-family: "Helvetica Neue",Helvetica,A;
+    font-weight: 500;
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+.footer { 
+    position: fixed;
+    bottom: 20%;
+    height: 20px
+}

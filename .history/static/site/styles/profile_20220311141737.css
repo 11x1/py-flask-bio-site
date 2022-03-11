@@ -1,0 +1,27 @@
+.header { 
+    position: fixed;
+    margin: -9px;
+    height: 70px;
+    width: 100%;
+    background-color: #383838; 
+}
+
+.header img {
+    padding: 5px;
+    max-width: 60px;
+}
+
+.header-info-text {
+    position: fixed;
+    top: 25px;
+
+    color: #8080eb;
+    font-weight: 600;
+    font-size: 18px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.header-logout-btn {
+    position: fixed;
+    right: 10px
+}

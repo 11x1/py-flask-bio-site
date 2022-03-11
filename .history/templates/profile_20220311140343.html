@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/site/styles/main.css" rel="stylesheet" media="screen">
+    <link href="../static/site/styles/profile.css" rel="stylesheet" media="screen">
+    <title>Profile</title>
+</head>
+<body>
+    <header class="header">
+        <img src="../static/site/files/logo.png" alt="">
+        <a>Logged in as {{username}} (uid {{uid}})</a>
+    </header>
+    <br>
+    This profile belongs to {{profile_username}} (uid: {{profile_userid}})
+    <br>
+    {{profile_description}}
+    <br>
+    <img src="{{profile_picture_url}}" alt="" width="100"></img>
+    <br>
+    <a href="../logout">log out</a>
+    <a href="../userlist">userlist</a>
+    {%if is_owner%}
+    <a href="../{{url}}">edit profile</a>
+    {%endif%}
+</body>
+</html>

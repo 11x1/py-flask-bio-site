@@ -1,0 +1,43 @@
+.header { 
+    position: fixed;
+    margin: -9px;
+    height: 70px;
+    width: 100%;
+    background-color: #383838; 
+}
+
+.header img {
+    padding: 5px;
+    max-width: 60px;
+}
+
+.header-info-text {
+    position: fixed;
+    top: 25px;
+
+    color: #8080eb;
+    font-weight: 600;
+    font-size: 18px;
+    font-family: "Helvetica Neue",Helvetica,A;
+}
+
+.header-logout-btn {
+    position: fixed;
+    right: 10px;
+    top: 20px;
+    border: 6px solid #ababeb;
+    background-color: #ababeb;
+    border-radius: 6px;
+
+    color: #a0a0ff;
+    font-family: "Helvetica Neue",Helvetica,A;
+    font-weight: 700;
+    text-decoration: none;
+    
+}
+
+.header-logout-btn img {
+    max-width: 20px;
+    filter: invert(100%) sepia(100%) hue-rotate(-180deg) saturate(3);
+    margin-left: -4px
+}
