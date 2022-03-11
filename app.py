@@ -1,15 +1,34 @@
+import os
 from flask import Flask, url_for, redirect, session, render_template, request
-
+from werkzeug.utils import secure_filename
 from sql_helpers import login_and_return_db
 
 app = Flask(__name__)
 app.secret_key = 'cattofatto'
 
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'jpg', 'png', 'gif'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# Max upload to 16MB
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
+
+# https://flask.palletsprojects.com/en/2.0.x/patterns/fileuploads/
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/uploads/<filename>')
+def render_image(filename):
+    if not 'username' in session: return redirect('login')
+    return redirect(url_for('static', filename='uploads/' + filename), code=301)
+
+
 @app.route('/', methods=['GET'])
 def index():
     if 'username' in session: return redirect(f'users/{session["username"]}.{session["uid"]}')
     return redirect('login')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
@@ -76,10 +95,10 @@ def userlist_page():
     return render_template('userlist.html', len=len(user_list), list=user_list)
 
 
-@app.route('/users/<string:username>.<int:userid>')
+@app.route('/users/<string:username>.<int:userid>', methods=['GET'])
 def profile(username, userid):
     # If we aren't logged in, return to login page
-    if not 'username' in session: return redirect('login')
+    if not 'username' in session: return redirect('../login')
     # Connect to database
     db = login_and_return_db()
     cursor = db.cursor()
@@ -103,13 +122,15 @@ def profile(username, userid):
     if session['username'] == username: 
         is_owner = True
         # Edit profile href value
-        url = f'users/{username}.{userid}/edit'
+        url = f'users/{username}.{userid}'
     
     # Get description and profile picture url from database
     cursor.execute(f'select description from users where username = "{username}"')
     profile_description = cursor.fetchone()[0]
     cursor.execute(f'select profile_picture from users where username="{username}"')
     profile_picture_url = cursor.fetchone()[0]
+    profile_picture_url = f'static/uploads/{profile_picture_url}'
+    print(profile_picture_url)
 
     # Render profile template with our variables
     #
@@ -152,16 +173,25 @@ def edit_profile(username, userid):
 
     if request.method == 'POST':
         # get form values
-        new_pfp_url = request.form['profile_picture_url']
         new_desc = request.form['description']
+
+        #try: 
+        file = request.files['profile_picture']
+        if file.filename != '' and allowed_file(file.filename):
+            filename = f'khey.{str(file.filename)[-3:]}'
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        #except: file = None
+
         if len(new_desc) > 100: error = 'Description too long (>100 chars)'
         else:
-            if new_pfp_url != profile_picture_url:
-                cursor.execute(f"UPDATE users SET profile_picture = '{new_pfp_url}' WHERE username = '{username}'")
             if new_desc != description:
                 cursor.execute(f"UPDATE users SET description = '{new_desc}' WHERE username = '{username}'")
-            db.commit()
-            return redirect(f'/users/{username}.{userid}')
+        if file is not None:
+            print(filename, profile_picture_url)
+            if filename != profile_picture_url:
+                cursor.execute(f"UPDATE users SET profile_picture = '{filename}' WHERE username = '{username}'")    
+        db.commit()
+        return redirect(f'/users/{username}.{userid}')
 
     # Render profileedit template with our variables
     #
