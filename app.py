@@ -13,11 +13,12 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Max upload to 16MB
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 
-# https://flask.palletsprojects.com/en/2.0.x/patterns/fileuploads/
+# https://flask.palletsprojects.com/en/2.0.x/patterns/fileuploads/ 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# testing vscode
 
 @app.route('/uploads/<filename>')
 def render_image(filename):
