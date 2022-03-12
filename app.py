@@ -1,7 +1,10 @@
 import os
 from flask import Flask, url_for, redirect, session, render_template, request
-from werkzeug.utils import secure_filename
-from sql_helpers import login_and_return_db
+from sql_helpers import login_and_return_db, initialize_database
+import datetime
+import requests
+import json
+import shutil
 
 app = Flask(__name__)
 app.secret_key = 'cattofatto'
@@ -12,13 +15,17 @@ ALLOWED_EXTENSIONS = {'jpg', 'png', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Max upload to 16MB
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
+app.config['REMEMBER_COOKIE_DURATION'] = datetime.timedelta(seconds=86400)
+
+initialize_database()
+db = login_and_return_db()
+db_cursor = db.cursor()
+db_cursor.execute(f'use webdev')
 
 # https://flask.palletsprojects.com/en/2.0.x/patterns/fileuploads/ 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-# testing vscode
 
 @app.route('/uploads/<filename>')
 def render_image(filename):
@@ -38,9 +45,7 @@ def login_page():
         username = request.form['username']
         password = request.form['password']
 
-        db = login_and_return_db()
-        db_cursor = db.cursor()
-        db_cursor.execute('use webdev')
+        global db_cursor
         db_cursor.execute(f'select username, password, userid from users where username="{username}"')
         query = db_cursor.fetchall()
         if len(query) == 0: error = f'User {username} does not exist'
@@ -66,12 +71,19 @@ def register_page():
         elif len(username) < 3: error = 'username is too short'
         elif len(password) < 8: error = 'password is too short'
         else:
-            db = login_and_return_db()
-            db_cursor = db.cursor()
-            db_cursor.execute('use webdev')
+            global db
+            global db_cursor
             db_cursor.execute('select count(*) from users')
             rows = db_cursor.fetchone()[0]
-            db_cursor.execute(f'INSERT INTO users VALUES({rows + 1}, "{username}", "{password}", {0}, {0})')
+
+            # Random dog image from dog.ceo api (cool feature)
+            image_url = json.loads(requests.get('https://dog.ceo/api/breeds/image/random').text)['message']
+            # Get image bytes
+            res = requests.get(image_url)
+            with open(f'static/uploads/{username}.png', 'wb') as f:
+                f.write(res.content)
+
+            db_cursor.execute(f'INSERT INTO users VALUES({rows + 1}, "{username}", "{password}", "{username + ".png"}", "{"Hi my name is " + username}")')
             db.commit()
             return redirect('login')
 
@@ -82,33 +94,28 @@ def register_page():
 def userlist_page():
     if not 'username' in session: return redirect('login')
 
-    db = login_and_return_db()
-    cursor = db.cursor()
-    cursor.execute('use webdev')
-    cursor.execute('select userid, username from users')
-    data = cursor.fetchall()
+    global db_cursor
+    db_cursor.execute('select userid, username from users')
+    data = db_cursor.fetchall()
     user_list = []
     for row in data:
         user_list.append(row[1])
     
     print(user_list)
     
-    return render_template('userlist.html', len=len(user_list), list=user_list)
+    return render_template('userlist.html', len=len(user_list), list=user_list, username=session['username'])
 
 
 @app.route('/users/<string:username>.<int:userid>', methods=['GET'])
 def profile(username, userid):
     # If we aren't logged in, return to login page
     if not 'username' in session: return redirect('../login')
-    # Connect to database
-    db = login_and_return_db()
-    cursor = db.cursor()
-    cursor.execute('use webdev')
 
     # check if userid exists
-    cursor.execute(f'select username from users where userid = "{userid}"')
+    global db_cursor
+    db_cursor.execute(f'select username from users where userid = "{userid}"')
     try:
-        real_username = cursor.fetchone()[0]
+        real_username = db_cursor.fetchone()[0]
     except:
         return redirect('../profile_not_found')
     
@@ -117,7 +124,6 @@ def profile(username, userid):
 
     # variables if user is the owner of the profile
     is_owner = None
-    url = None
 
     # Handle if user is owner of the profile
     if session['username'] == username: 
@@ -126,10 +132,10 @@ def profile(username, userid):
     url = f'users/{session["username"]}.{session["uid"]}'
     
     # Get description and profile picture url from database
-    cursor.execute(f'select description from users where username = "{username}"')
-    profile_description = cursor.fetchone()[0]
-    cursor.execute(f'select profile_picture from users where username="{username}"')
-    profile_picture_url = cursor.fetchone()[0]
+    db_cursor.execute(f'select description from users where username = "{username}"')
+    profile_description = db_cursor.fetchone()[0]
+    db_cursor.execute(f'select profile_picture from users where username="{username}"')
+    profile_picture_url = db_cursor.fetchone()[0]
     profile_picture_url = f'static/uploads/{profile_picture_url}'
     print(profile_picture_url)
 
@@ -154,23 +160,21 @@ def profilenofound_page():
     return render_template('profilenotfound.html')
 
 
-@app.route('/users/<string:username>.<int:userid>/edit', methods=['POST', 'GET'])
+@app.route('/users/<string:username>.<int:userid>/edit', methods=['GET', 'POST'])
 def edit_profile(username, userid):
     if not 'username' in session: return redirect('login')
     # if we arent logged in as the user we are looking at, return to user profile page
     if not session['username'] == username: return redirect(f'../users/{username}.{userid}')
     error = None
 
-    # db stuff
-    db = login_and_return_db()
-    cursor = db.cursor()
-    cursor.execute(f'use webdev')
-
     # variables for template rendering
-    cursor.execute(f'select description from users where username="{username}"')
-    description = cursor.fetchone()[0]
-    cursor.execute(f'select profile_picture from users where username="{username}"')
-    profile_picture_url = cursor.fetchone()[0]
+    global db
+    global db_cursor
+    
+    db_cursor.execute(f'select description from users where username="{username}"')
+    description = db_cursor.fetchone()[0]
+    db_cursor.execute(f'select profile_picture from users where username="{username}"')
+    profile_picture_url = db_cursor.fetchone()[0]
 
     if request.method == 'POST':
         # get form values
@@ -178,21 +182,24 @@ def edit_profile(username, userid):
 
         #try: 
         file = request.files['profile_picture']
+        filename = None
+        print(file.filename)
         if file.filename != '' and allowed_file(file.filename):
             filename = f'khey.{str(file.filename)[-3:]}'
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         #except: file = None
 
-        if len(new_desc) > 100: error = 'Description too long (>100 chars)'
+        if len(new_desc) > 300: error = 'Description too long (>300 chars)'
         else:
             if new_desc != description:
-                cursor.execute(f"UPDATE users SET description = '{new_desc}' WHERE username = '{username}'")
-        if file is not None:
+                db_cursor.execute(f"UPDATE users SET description = '{new_desc}' WHERE username = '{username}'")
+        if file is not None and filename is not None and error is None:
             print(filename, profile_picture_url)
             if filename != profile_picture_url:
-                cursor.execute(f"UPDATE users SET profile_picture = '{filename}' WHERE username = '{username}'")    
+                db_cursor.execute(f"UPDATE users SET profile_picture = '{filename}' WHERE username = '{username}'")    
         db.commit()
         return redirect(f'/users/{username}.{userid}')
+    url = f'../users/{session["username"]}.{session["uid"]}'
 
     # Render profileedit template with our variables
     #
@@ -204,7 +211,7 @@ def edit_profile(username, userid):
     # profile_description -> user profile desc. we are looking at
     # profile_picture_url -> user profile pfp url we are looking at
     # error               -> feedback to user (description too long)
-    return render_template('profileedit.html', username=session['username'], uid=session['uid'], profile_username=username, profile_userid=userid, description=description, profile_picture_url=profile_picture_url, error=error)
+    return render_template('profileedit.html', url=url, username=session['username'], uid=session['uid'], profile_username=session['username'], profile_userid=session['uid'], description=description, profile_picture_url=profile_picture_url, error=error)
 
 
 @app.route('/logout')

@@ -4,30 +4,52 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../static/site/styles/main.css" rel="stylesheet" media="screen">
-
+    <link href="{{url_for('static', filename='site/styles/main.css')}}" rel="stylesheet" media="screen">
+    <link href="{{url_for('static', filename='site/styles/header-footer.css')}}" rel="stylesheet" media="screen">
+    <link href="{{url_for('static', filename='site/styles/profileedit.css')}}" rel="stylesheet" media="screen">
     <title>Profile</title>
 </head>
 <body>
-    Logged in as {{username}} (uid {{uid}})
-    <br>
-    This profile belongs to {{profile_username}} (uid: {{profile_userid}})
-    <br>
-    <form autocomplete="off" method="post" enctype="multipart/form-data">
-        <label>
-            <input type="file" placeholder="pfp url" name="profile_picture">
-        </label>
-        <label>
-            <input type="text" placeholder="pfp url" name="profile_picture_url" value="{{profile_picture_url}}">
-        </label>
-        <label>
-            <input type="text" placeholder="description" name="description" value="{{description}}">
-        </label>
-        <button class="btn-signin" type="submit" value="save">Save</button>
+    <header class="header">
+        <img class="header-img" src="{{url_for('static', filename='site/files/logo.png')}}" alt="">
+        <a class="header-info-text">klol | logged in as {{username}}</a>
+        <a href="../logout" class="header-logout-btn">
+            log out
+        </a> 
+        <a href="../{{url}}" class="header-profile-btn">
+            profile
+        </a> 
+    </header>
+    
+    <div class="profile-edit-container">
+        <div class="profile-edit-card">
+            <form autocomplete="off" method="post" enctype="multipart/form-data">
+                <div class="profile-picture">
+                    <img alt="" src="{{url_for('static', filename='uploads/')}}{{username}}.png">
+                </div>
+                <input class="pfp-upload" type="file" placeholder="pfp url" name="profile_picture" >
+
+                <div class="profile-details">
+                    <div class="profile-name">{{profile_username}}</div>
+                    <div class="profile-userid">uid {{profile_userid}}</div>
+                    <div class="profile-description"><input type="text" class="descriptionarea" role="textbox" name="description" value="{{description}}"></div>
+                </div>
+                <button class="btn-signin" type="submit" value="save">Save</button>
+                </div>
+            </form>
+            {%if error %}
+            <p class="error" style="color: red"><strong>Error:</strong> {{ error }}
+            {% endif %}
         </div>
-    </form>
-    {%if error %}
-        <p class="error" style="color: red"><strong>Error:</strong> {{ error }}
-    {% endif %}
+    </div>
+
+
+    
+    <footer class="footer">
+        <h1>profile site - by khey</h1> 
+        <div class="links">
+            <a class="link" href="../userlist">userlist</a>
+        </div>
+    </footer>
 </body>
 </html>

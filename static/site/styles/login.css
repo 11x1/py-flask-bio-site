@@ -18,6 +18,7 @@
 }
 
 .input-fields input {
+    transition-duration: 0.3s;
     position: relative;
     margin: 2px;
     padding: 6px;
@@ -27,6 +28,20 @@
     border-radius: 10px;
 }
 
+.input-fields input:hover {
+    transition-duration: 0.3s;
+    color: #707fa9;
+    background-color: #161616;
+    border-radius: 8px;
+}
+
+.input-fields input:focus {
+    transition-duration: 0.3s;
+    color: #707fa9;
+    background-color: #161616;
+    border-radius: 8px;
+}
+
 .signin-buttons {
     position: relative;
     display: grid;
@@ -34,17 +49,24 @@
 }
 
 .btn-signin {
+    transition-duration: 0.3s;
     position: relative;
     width: 50%;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
-    background-color: #66749b;
+    background-color: #7282ad;
     border: #b4c7ff solid;
 }
 
+.btn-signin:hover {
+    transition-duration: 0.3s;
+    background-color: #5f6d91;
+}
+
 .btn-register {
+    transition-duration: 0.3s;
     margin-top: 7px;
     color: #66749b;
     text-decoration: none;
@@ -53,5 +75,7 @@
 }
 
 .btn-register:hover {
+    transition-duration: 0.3s;
     cursor: pointer;
+    color: #556182;
 }

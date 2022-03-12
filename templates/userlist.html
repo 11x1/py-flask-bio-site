@@ -5,12 +5,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../static/site/styles/main.css" rel="stylesheet" media="screen">
+    <link href="../static/site/styles/header-footer.css" rel="stylesheet" media="screen">
+    <link href="../static/site/styles/userlist.css" rel="stylesheet" media="screen">
     <title>Userlist</title>
 </head>
 <body>
-    {%for i in range(0, len)%}
-        <li><a href="../users/{{list[i]}}.{{i + 1}}">{{list[i]}} (uid {{i + 1}})</a></li>
-    {%endfor%}
+    <header class="header">
+        <img class="header-img" src="../static/site/files/logo.png" alt="">
+        <a class="header-info-text">klol | logged in as {{username}}</a>
+        <a href="../logout" class="header-logout-btn">
+            log out
+        </a> 
+        <a href="../{{url}}" class="header-profile-btn">
+            profile
+        </a> 
+    </header>
 
+    <div class="userlist-container">
+        <div class="userlist-card">
+            <h1>user list</h1>
+            {%for i in range(0, len)%}
+            <div class="user-container"> 
+                <div class="user-data" onclick="window.location = '../users/{{list[i]}}.{{i + 1}}'; ">
+                    <img src="../static/uploads/{{list[i]}}.png" alt="">
+                    <a>{{list[i]}} (uid {{i + 1}})</a>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <h1>profile site - by khey</h1> 
+        <div class="links"></div>
+    </footer>
 </body>
 </html>

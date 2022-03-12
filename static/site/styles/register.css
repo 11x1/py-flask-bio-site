@@ -14,6 +14,10 @@
     color: #95a5d5;
 }
 
+.text:hover {
+    color: #95a5d5;
+}
+
 .input-fields {
     display: grid;
     position: relative;
@@ -30,6 +34,20 @@
     border-radius: 10px;
 }
 
+.input-fields input:hover {
+    transition-duration: 0.3s;
+    color: #707fa9;
+    background-color: #161616;
+    border-radius: 8px;
+}
+
+.input-fields input:focus {
+    transition-duration: 0.3s;
+    color: #707fa9;
+    background-color: #161616;
+    border-radius: 8px;
+}
+
 .register-buttons {
     position: relative;
     display: grid;
@@ -37,12 +55,19 @@
 }
 
 .btn-register {
+    font-weight: 500;
+    transition-duration: 0.3s;
     position: relative;
     width: 50%;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
-    background-color: #66749b;
+    background-color: #7282ad;
     border: #b4c7ff solid;
+}
+
+.btn-register:hover {
+    transition-duration: 0.3s;
+    background-color: #5f6d91;
 }

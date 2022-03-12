@@ -1,4 +1,4 @@
-.main-profile {
+.profile-edit-container {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -6,13 +6,12 @@
     padding: 10px;
 }
 
-.profile-card {
+.profile-edit-card {
     background-color: #313131;
     border-radius: 10px;
     box-shadow: 3px 3px 0 #66749b;
     width: 420px;
     min-height: 80px;
-
 }
 
 .profile-picture img {
@@ -28,7 +27,16 @@
     border: 3px solid #8080eb;
 }
 
-.profile-card div.profile-name {
+input[type=file] {
+    position:fixed;
+    left: 15px;
+    width: 60px;
+    min-height: 60px;
+    opacity: 0
+}
+
+
+.profile-edit-card div.profile-name {
     color: #8080eb;
     font-family: "Helvetica Neue",Helvetica,A;
     font-weight: 700;
@@ -36,20 +44,27 @@
     padding-top: 5px;
 }
 
-.profile-card div.profile-userid {
+.profile-edit-card div.profile-userid {
     color: #8080eb;
     font-family: "Helvetica Neue",Helvetica,A;
     font-weight: 600;
     font-size: 15px;
 }
 
-.profile-card div.profile-description {
-    word-wrap: break-word;
+.profile-edit-card div.profile-description {
     color: #8080eb;
     font-family: "Helvetica Neue",Helvetica,A;
     font-weight: 500;
     font-size: 16px;
     margin-left: 70px;
-    padding-right: 10px;
-    padding-bottom: 5px;
+}
+
+.descriptionarea {
+    border: 2px solid #8080eb;
+    border-radius: 8px;
+    background-color: #1f1f1f;
+    width: 330px;
+    color: #8080eb;
+    min-height: 20px;
+    white-space: pre-line;
 }

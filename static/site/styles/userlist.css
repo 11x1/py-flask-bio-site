@@ -1,0 +1,70 @@
+.userlist-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+}
+
+.userlist-card {
+    background-color: #313131;
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 #66749b;
+    width: 420px;
+    min-height: 80px;
+}
+
+.userlist-card h1{
+    font-family: "Helvetica Neue",Helvetica,A;
+    font-size: 20px;
+    color: #8080eb;
+    text-shadow: 2px 2px 0 #666666;
+    text-align: center;
+    padding-top: 10px;
+    transition-duration: 0.5s;
+}
+
+.userlist-card h1:hover {
+    font-size: 21px;
+    transition-duration: 0.2s;
+}
+
+.user-data {
+    transition-duration: 0.8s;
+    padding-left: 10px;
+    border: 2px solid #8080eb;
+    border-radius: 10px;
+}
+
+.user-data:hover {
+    transition-duration: 0.5s;
+    cursor:pointer;
+    background-color: #414141;
+    border: 3px solid #8080eb;
+    border-radius: 8px;
+}
+
+.user-container {
+    position: inline-block;
+    padding: 10px;
+    padding-top: 0;
+}
+
+.user-data img {
+    margin-top: 3px;
+    width:50px;
+    height:50px;
+    object-fit: fill;
+    border-radius: 10px;
+    border: 2px solid #acace9
+}
+
+.user-data a {
+    position: relative; 
+    left:10px; 
+    top:-18px; 
+    font-family: "Helvetica Neue",Helvetica,A;
+    font-size: 20px;
+    font-weight: 600;
+    color: #9b9beb;
+}
