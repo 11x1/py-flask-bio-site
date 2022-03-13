@@ -10,7 +10,7 @@ def initialize_database():
     cursor = db.cursor()
     cursor.execute('create database if not exists webdev')
     cursor.execute('use webdev')
-    cursor.execute('create table if not exists users (userid VARCHAR(255), username VARCHAR(255), password VARCHAR(255), profile_picture VARCHAR(20), description VARCHAR(300))')
+    cursor.execute('create table if not exists users (userid VARCHAR(255), username VARCHAR(255), password VARCHAR(255), profile_picture VARCHAR(100), description VARCHAR(300))')
     
 
 def login_and_return_db(): 

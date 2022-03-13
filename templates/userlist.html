@@ -26,9 +26,16 @@
             <h1>user list</h1>
             {%for i in range(0, len)%}
             <div class="user-container"> 
-                <div class="user-data" onclick="window.location = '../users/{{list[i]}}.{{i + 1}}'; ">
-                    <img src="../static/uploads/{{list[i]}}.png" alt="">
-                    <a>{{list[i]}} (uid {{i + 1}})</a>
+                <div class="user-data" onclick="window.location = '../users/{{list[i][1]}}.{{list[i][0]}}'; ">
+                    <img src="../static/uploads/{{list[i][1]}}.png" alt="">
+                    <a>{{list[i][1]}} (uid {{list[i][0]}})</a>
+                    {%if is_admin %}
+                    <a class="delete-user">
+                        <form method="post">
+                            <button class="btn-delete-user" name="delete" type="submit" value="{{list[i][1]}}">delete user</button>
+                        </form>
+                    </a>
+                    {% endif %}
                 </div>
             </div>
             {%endfor%}
