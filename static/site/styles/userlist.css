@@ -1,9 +1,17 @@
 .userlist-container {
     position: absolute;
+    margin-top: 1%;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     padding: 10px;
+}
+
+.i-need-space { 
+    position: absolute;
+    top: 110%;
+    height: 100px;
+    width: 100%;
 }
 
 .userlist-card {

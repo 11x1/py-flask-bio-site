@@ -141,10 +141,10 @@ def userlist_page():
     user_list = []
     for row in data:
         # row [0: userid, 1: username]
-        user_list.append((row[0], row[1], not row[1]=='admin'))
+        user_list.append((int(row[0]), row[1], not row[1]=='admin'))
     
     # Sort our values from database to make them look arranged on userlist page
-    sorter = lambda x: (x[0], x[1])
+    sorter = lambda x: (x[2], x[0], x[1])
     user_list = sorted(user_list, key=sorter)
 
     return render_template('userlist.html', len=len(user_list), list=user_list, username=session['username'], is_admin=is_admin)

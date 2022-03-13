@@ -10,17 +10,6 @@
     <title>Userlist</title>
 </head>
 <body>
-    <header class="header">
-        <img class="header-img" src="../static/site/files/logo.png" alt="">
-        <a class="header-info-text">klol | logged in as {{username}}</a>
-        <a href="../logout" class="header-logout-btn">
-            log out
-        </a> 
-        <a href="../{{url}}" class="header-profile-btn">
-            profile
-        </a> 
-    </header>
-
     <div class="userlist-container">
         <div class="userlist-card">
             <h1>user list</h1>
@@ -42,7 +31,21 @@
             {%endfor%}
         </div>
     </div>
+
+
+    <header class="header">
+        <img class="header-img" src="../static/site/files/logo.png" alt="">
+        <a class="header-info-text">klol | logged in as {{username}}</a>
+        <a href="../logout" class="header-logout-btn">
+            log out
+        </a> 
+        <a href="../{{url}}" class="header-profile-btn">
+            profile
+        </a> 
+    </header>
     
+    <div class="i-need-space"></div>
+
     <footer class="footer">
         <h1>profile site - by khey</h1> 
         <div class="links"></div>
