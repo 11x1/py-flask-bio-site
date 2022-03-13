@@ -30,6 +30,7 @@
 }
 
 .user-data {
+    display: flex;
     transition-duration: 0.8s;
     padding-left: 10px;
     border: 2px solid #8080eb;
@@ -38,20 +39,19 @@
 
 .user-data:hover {
     transition-duration: 0.5s;
-    cursor:pointer;
     background-color: #414141;
     border: 3px solid #8080eb;
     border-radius: 8px;
 }
 
 .user-container {
-    position: inline-block;
     padding: 10px;
     padding-top: 0;
 }
 
 .user-data img {
-    margin-top: 3px;
+    margin: 3px;
+    margin-left: 0;
     width:50px;
     height:50px;
     object-fit: fill;
@@ -61,10 +61,40 @@
 
 .user-data a {
     position: relative; 
-    left:10px; 
-    top:-18px; 
+    left:10px;
+    top: 18px;
     font-family: "Helvetica Neue",Helvetica,A;
     font-size: 20px;
     font-weight: 600;
     color: #9b9beb;
+}
+
+.user-data a:hover {
+    cursor: default;
+}
+
+.test {
+    position: relative;
+    top: -45px;
+    left: 78%;
+    height: 0px;
+}
+
+.test button {
+    transition-duration: 0.5s;
+    font-family: "Helvetica Neue",Helvetica,A;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: #414141;
+    color: #8080eb;
+    border: 1px solid transparent;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.test button:hover {
+    transition-duration: 0.2s;
+    background-color: #3f3f3f;
+    color: #6b6bb6;
+    cursor: pointer;
 }

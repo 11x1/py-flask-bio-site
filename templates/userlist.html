@@ -29,14 +29,15 @@
                 <div class="user-data" onclick="window.location = '../users/{{list[i][1]}}.{{list[i][0]}}'; ">
                     <img src="../static/uploads/{{list[i][1]}}.png" alt="">
                     <a>{{list[i][1]}} (uid {{list[i][0]}})</a>
-                    {%if is_admin %}
-                    <a class="delete-user">
-                        <form method="post">
-                            <button class="btn-delete-user" name="delete" type="submit" value="{{list[i][1]}}">delete user</button>
-                        </form>
-                    </a>
-                    {% endif %}
+                    
                 </div>
+                {%if is_admin and list[i][2] %}
+                <div class="test">
+                    <form method="post">
+                        <button class="btn-delete-user" name="delete" type="submit" value="{{list[i][1]}}">delete user</button>
+                    </form>
+                </div>
+                {% endif %}
             </div>
             {%endfor%}
         </div>

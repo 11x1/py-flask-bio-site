@@ -141,7 +141,7 @@ def userlist_page():
     user_list = []
     for row in data:
         # row [0: userid, 1: username]
-        user_list.append((row[0], row[1]))
+        user_list.append((row[0], row[1], not row[1]=='admin'))
     
     # Sort our values from database to make them look arranged on userlist page
     sorter = lambda x: (x[0], x[1])
